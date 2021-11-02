@@ -1,0 +1,28 @@
+{% layout 'base/boilerplate' %}
+{% block content %}
+<h1>Ooops, that should not have happended!</h1>
+<p> Something went horribly wrong with the service.</p>
+<p> We are terribly sorry it happened to you! </p>
+{% endblock %}
+
+{% block extensions %}
+<title>Something Went Wrong | LinkMe</title>
+<meta name="description" content="LinkMe"/>
+<link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=Karla&display=swap" rel="stylesheet">
+{% endblock %}
+
+{% block styles %}
+<style amp-custom>
+body{
+  font-family:'Karla', sans-serif;
+  display:flex;
+  flex-direction:column;
+  background:#fafafa;
+  padding:2rem;
+  font-size:16px;
+  line-height:24px;
+  color:#121212;
+}
+</style>
+{% endblock %}

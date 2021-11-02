@@ -1,0 +1,118 @@
+databases:
+- engine: PG
+  name: db
+  num_nodes: 1
+  size: db-s-dev-database
+  version: "12"
+- cluster_name: dev-redis
+  engine: REDIS
+  name: dev-redis
+  production: true
+  version: "6"
+name: linktr
+region: ams
+services:
+- environment_slug: node-js
+  envs:
+  - key: DATABASE
+    scope: RUN_TIME
+    value: ${db.DATABASE}
+  - key: CA_CERT
+    scope: RUN_AND_BUILD_TIME
+    value: ${db.CA_CERT}
+  - key: DATABASE_PASSWORD
+    scope: RUN_AND_BUILD_TIME
+    value: ${db.PASSWORD}
+  - key: DATABASE_USERNAME
+    scope: RUN_AND_BUILD_TIME
+    value: ${db.USERNAME}
+  - key: DATABASE_HOST
+    scope: RUN_AND_BUILD_TIME
+    value: ${db.HOSTNAME}
+  - key: DATABASE_PORT
+    scope: RUN_AND_BUILD_TIME
+    value: ${db.PORT}
+  - key: SUPERUSER_EMAIL
+    scope: RUN_AND_BUILD_TIME
+    value: clark.kent@daily.planet
+  - key: SUPERUSER_PASSWORD
+    scope: RUN_AND_BUILD_TIME
+    value: "12345"
+  - key: PAYPAL_ACCOUNT
+    scope: RUN_AND_BUILD_TIME
+    value: sb-472n9v4678581@business.example.com
+  - key: PAYPAL_CLIENT_ID
+    scope: RUN_AND_BUILD_TIME
+    value: AdeP8LpGGtgbpGLnM5A7bDSjjEWZp0VZP6DvyjoD1Qvgp5tHeIy_NPRw16El4EjMWzTXZ6eA9RHBTlER
+  - key: PAYPAL_SECRET
+    scope: RUN_AND_BUILD_TIME
+    value: EFzQg7nMpZ8FU_bE2DdoSSOhAI-1XbqY9lJdssjMI_6HRBmwy0IwLItoTiKpW35AK3kAdd2seJ6dYZoo
+  - key: PAYPAL_PRODUCT_ID
+    scope: RUN_AND_BUILD_TIME
+    value: linkme-premium
+  - key: GOOGLE_OAUTH_CLIENT_ID
+    scope: RUN_AND_BUILD_TIME
+    value: 414950490140-99avvv2al2f1h7enj3k54ecdtt27ljk3.apps.googleusercontent.com
+  - key: GOOGLE_OAUTH_SECRET
+    scope: RUN_AND_BUILD_TIME
+    value: sdGgZyvmCIM2yk1JVOQX1UwX
+  - key: REDIS_URL
+    scope: RUN_AND_BUILD_TIME
+    value: ${dev-redis.REDIS_URL}
+  github:
+    branch: main
+    deploy_on_push: true
+    repo: Yuugen-Studios/linkme
+  health_check:
+    http_path: /.well-known/health-check
+    initial_delay_seconds: 30
+    period_seconds: 30
+    timeout_seconds: 180
+  http_port: 8080
+  instance_count: 1
+  instance_size_slug: professional-m
+  name: linktr
+  routes:
+  - path: /
+  run_command: yarn start
+static_sites:
+- build_command: yarn build
+  catchall_document: index.html
+  environment_slug: node-js
+  envs:
+  - key: PUBLIC_URL
+    scope: BUILD_TIME
+    value: /dashboard
+  - key: REACT_APP_API
+    scope: BUILD_TIME
+    value: https://linktr-35qll.ondigitalocean.app/.api/graphql
+  - key: REACT_APP_BASE_URL
+    scope: BUILD_TIME
+    value: https://linktr-35qll.ondigitalocean.app/
+  github:
+    branch: main
+    deploy_on_push: true
+    repo: Yuugen-Studios/linkme-dashboard
+  name: dashboard
+  routes:
+  - path: /dashboard
+- build_command: yarn build admin-dashboard
+  catchall_document: index.html
+  environment_slug: node-js
+  envs:
+  - key: DATABASE_URL
+    scope: BUILD_TIME
+    value: ${db.DATABASE_URL}
+  - key: PUBLIC_URL
+    scope: BUILD_TIME
+    value: /admin-dashboard
+  - key: REACT_APP_API
+    scope: BUILD_TIME
+    value: https://linktr-35qll.ondigitalocean.app/.api/graphql
+  github:
+    branch: main
+    deploy_on_push: true
+    repo: Yuugen-Studios/linkme-dashboard
+  name: admin-dashboard
+  routes:
+  - path: /admin-dashboard

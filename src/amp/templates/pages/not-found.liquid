@@ -1,0 +1,27 @@
+{% layout 'base/boilerplate' %}
+{% block content %}
+<h1>Error 404: Page not found</h1>
+<p>This page does not exist. We are sorry. Hope you'll find what you were looking for</p>
+{% endblock %}
+
+{% block extensions %}
+<title>LinkMe</title>
+<meta name="description" content="LinkMe"/>
+<link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=Karla&display=swap" rel="stylesheet">
+{% endblock %}
+
+{% block styles %}
+<style amp-custom>
+body{
+  font-family:'Karla', sans-serif;
+  display:flex;
+  flex-direction:column;
+  background:#fafafa;
+  padding:2rem;
+  font-size:16px;
+  line-height:24px;
+  color:#121212;
+}
+</style>
+{% endblock %}

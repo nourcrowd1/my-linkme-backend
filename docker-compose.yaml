@@ -1,0 +1,33 @@
+version: '3'
+services:
+  db:
+    image: 'postgres:12-alpine'
+    environment:
+    - POSTGRES_HOST_AUTH_METHOD=trust
+    - POSTGRES_DATABASE=test
+    ports:
+      - '5432:5432'
+    networks:
+      - linktr
+  redis:
+    image: 'redis:6-alpine'
+    ports:
+      - '6379:6379'
+    networks:
+      - linktr
+  api:
+    image: linkme-api
+    build: .
+    networks:
+      - linktr
+    ports:
+      - "3030:3030"
+    environment:
+      DATABASE_HOST: db
+      DATABASE_USERNAME: postgres
+      DATABASE_PASSWORD: postgres
+      DATABASE_PORT: 5432
+      REDIS_URL: redis://redis:6379
+networks:
+  linktr:
+    driver: bridge

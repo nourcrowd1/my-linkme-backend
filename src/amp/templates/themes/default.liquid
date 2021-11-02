@@ -1,0 +1,175 @@
+{% layout 'base/theme' %}
+{% block content %}
+  <script async custom-element="amp-accordion" src="https://cdn.ampproject.org/v0/amp-accordion-0.1.js"></script>
+
+  <main >
+    {% if avatar.url %}
+        <amp-img
+            alt="<% username %>"
+            src="<% avatar.url  %>"
+            width="<% avatar.width %>"
+            height="<% avatar.height %>"
+            style="max-width: 96px;"
+            layout="intrinsic"
+            class="avatar"
+          >
+        </amp-img>
+    {% else %}
+        <div class="avatar">
+            <svg placeholder="" focusable="false" data-prefix="fas" data-icon="user" class="svg-inline--fa fa-user fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M224 256c70.7 0 128-57.3 128-128S294.7 0 224 0 96 57.3 96 128s57.3 128 128 128zm89.6 32h-16.7c-22.2 10.2-46.9 16-72.9 16s-50.6-5.8-72.9-16h-16.7C60.2 288 0 348.2 0 422.4V464c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48v-41.6c0-74.2-60.2-134.4-134.4-134.4z"></path></svg>
+        </div>
+    {% endif %}
+
+  <h1><% name | default:username %></h1>
+  {% if intro %}
+    <p class="summary"><% intro | newline_to_br %></p>
+  {% endif %}
+  <ul class="links">
+      {% for link in links %}
+        {% if link.is_folder %}
+          <amp-accordion animate class="accordion">
+            <section>
+              <h2 class="item-link"><% link.label %><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="chevron-down" class="svg-inline--fa fa-chevron-down fa-w-14 chevron" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z"></path></svg>
+</h2>
+              <p>
+              {% for linkItem in link.subLinks %}
+                <a class="item-link" style="display: block" href="<% linkItem.url %>" target="_blank" data-vars-event-target="<% link.id %>">
+                    <%linkItem.icon%>
+                    <span><% linkItem.label %></span>
+                </a>
+              {% endfor %}
+              </p>
+            </section>
+          </amp-accordion>
+        {% else %}
+          {% if link.url %}
+             <a class="item-link" style="display: block" href="<% link.url %>" target="_blank" data-vars-event-target="<% link.id %>"><%link.icon%><span><% link.label %></span></a>
+          {% endif %}
+        {% endif %}
+
+      {% endfor %}
+  </ul>
+</main>
+{% endblock %}
+{% block extensions %}
+<title><% username %> | LinkMe</title>
+<meta name="description" content="<% intro %>"/>
+<link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+{% endblock %}
+{% block styles %}
+<style amp-custom>
+body{
+  background:#FFFFFF;
+  font-family: 'Inter', sans-serif;
+  font-size:16px;
+  line-height:19.36px;
+  color:#364152;
+  display:flex;
+  min-height:100vh;
+}
+main{
+  margin: 0 auto;
+  text-align:center;
+  min-width:260px;
+  max-width:320px;
+  padding:48px 30px;
+}
+h1{
+  margin:16px 0 32px;
+  font-weight:normal;
+  font-size:16px;
+  line-height:19.36px;
+}
+.avatar {
+  background: #E2E8F0;
+  border-radius: 50%;
+  margin-left: 50%;
+  transform: translateX(-50%);
+  width: 96px;
+  height: 96px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.avatar svg {
+    height: 48px;
+    color: #97A6BA;
+}
+
+.links{
+  list-style-type:none;
+  padding:0;
+  margin:0;
+}
+.links li + li{
+  margin-top: 18px;
+}
+
+.links  .item-link {
+  position: relative;
+  background-color: #F5F6F8;
+  color: #364152;
+  border-radius: 4px;
+  text-decoration: none;
+  padding: 10px;
+  min-height: 19px;
+  font-weight:bold;
+  transition:background-color 300ms ease-in;
+  display:flex !important;
+  align-items:center;
+  justify-content:center;
+}
+
+.links  .item-link:not(:first-child) {
+    margin-top: 10px;
+}
+
+.links .item-link span {
+  width: calc(100% - 70px);
+  text-align: center;
+}
+
+.links  .item-link svg {
+  position: absolute;
+  left: 10px;
+  height: 30px;
+}
+.links .item-link img {
+  position: absolute;
+  left: 10px;
+  height: 30px;
+}
+.links  .item-link:hover {
+  background-color:#E2E8F0;
+}
+
+.accordion {
+    border: 1px solid #97A6BA;
+    border-radius: 4px;
+    margin-top: 10px;
+}
+.accordion h2 {
+    position: relative;
+}
+
+.accordion h2 .chevron {
+    position: absolute;
+    right: 10px;
+    left: auto;
+    height: 15px;
+    top: 12px;
+    transition: transform .2s linear;
+}
+
+.accordion h2[aria-expanded="true"] .chevron {
+    transform: rotate(180deg);
+}
+
+.accordion p {
+    margin: 10px;
+}
+    
+</style>
+{% endblock %}

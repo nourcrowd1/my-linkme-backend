@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html ⚡ lang="<% lang | default:'en' %>">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="canonical" href="<% url | default: '.' %>" />
+    <link rel="preload" as="script" href="https://cdn.ampproject.org/v0.js" />
+
+    <script async custom-element="amp-geo" src="https://cdn.ampproject.org/v0/amp-geo-0.1.js"></script>
+    <script async custom-element="amp-analytics" src="https://cdn.ampproject.org/v0/amp-analytics-0.1.js"></script>
+    <script async custom-element="amp-bind" src="https://cdn.ampproject.org/v0/amp-bind-0.1.js"></script>
+    <script async src="https://cdn.ampproject.org/v0.js"></script>
+    {% if useAnalytics %}
+      <amp-geo layout="nodisplay">
+        <script type="application/json">
+          {
+            "AmpBind": true
+          }
+        </script>
+      </amp-geo>
+      <amp-analytics>
+        <script type="application/json">
+          {
+            "requests": {
+              "event": "<% analyticsURL %>?event=${eventId}&target=${eventTarget}&url=${canonicalUrl}&title=${title}&user_id=${account}&country=${ampGeo(ISOCountry)}"
+            },
+            "vars": {
+              "account": "<% id %>"
+            },
+            "triggers": {
+              "trackPageview": {
+                "on": "visible",
+                "request": "event",
+                "vars": {
+                  "eventId": "pageView"
+                }
+              },
+              "trackAnchorClicks": {
+                "on": "click",
+                "selector": "a",
+                "request": "event",
+                "vars": {
+                  "eventId": "linkClick"
+                }
+              }
+            }
+          }
+        </script>
+      </amp-analytics>
+      <amp-analytics>
+            <script type="application/json">
+              {
+                "vars" : {
+                  "gtag_id": "G-ZJHT7JZLYL",
+                  "config" : {
+                    "G-ZJHT7JZLYL": { "groups": "default" }
+                  }
+                }
+              }
+            </script>
+      </amp-analytics>
+    {% endif %}
+
+    {% block extensions %}{% endblock %}
+    {% block styles %}{% endblock %}
+    <style amp-boilerplate>
+      body {
+        -webkit-animation: -amp-start 8s steps(1, end) 0s 1 normal both;
+        -moz-animation: -amp-start 8s steps(1, end) 0s 1 normal both;
+        -ms-animation: -amp-start 8s steps(1, end) 0s 1 normal both;
+        animation: -amp-start 8s steps(1, end) 0s 1 normal both;
+      }
+      @-webkit-keyframes -amp-start {
+        from {
+          visibility: hidden;
+        }
+        to {
+          visibility: visible;
+        }
+      }
+      @-moz-keyframes -amp-start {
+        from {
+          visibility: hidden;
+        }
+        to {
+          visibility: visible;
+        }
+      }
+      @-ms-keyframes -amp-start {
+        from {
+          visibility: hidden;
+        }
+        to {
+          visibility: visible;
+        }
+      }
+      @-o-keyframes -amp-start {
+        from {
+          visibility: hidden;
+        }
+        to {
+          visibility: visible;
+        }
+      }
+      @keyframes -amp-start {
+        from {
+          visibility: hidden;
+        }
+        to {
+          visibility: visible;
+        }
+      }
+    </style>
+    <noscript
+      ><style amp-boilerplate>
+        body {
+          -webkit-animation: none;
+          -moz-animation: none;
+          -ms-animation: none;
+          animation: none;
+        }
+      </style></noscript
+    >
+  </head>
+  <body>
+  {% block content %}{% endblock %}
+
+  </body>
+</html>
